@@ -35,18 +35,16 @@ public class Movimiento {
     return this.fecha.equals(fecha);
   }
 
-  public boolean isDeposito() {
-    return esDeposito;
-  }
+  public boolean isDeposito() { return esDeposito; }
 
-  public boolean isExtraccion() {
-    return !esDeposito;
-  }
+  public boolean isExtraccion() { return !esDeposito;}
 
   public void agregateA(Cuenta cuenta) {
     cuenta.setSaldo(calcularValor(cuenta));
     cuenta.agregarMovimiento(fecha, monto, esDeposito);
   }
+
+  /* El movimiento tiene la responsabilidad de calcular el valor de la cuenta?*/
 
   public double calcularValor(Cuenta cuenta) {
     if (esDeposito) {
