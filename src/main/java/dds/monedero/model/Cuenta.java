@@ -43,9 +43,7 @@ public class Cuenta {
 
   public void sacar(double cuanto) {
     validarMonto(cuanto);
-    if (getSaldo() - cuanto < 0) {
-      throw new SaldoMenorException("No puede sacar mas de " + getSaldo() + " $");
-    }
+    validarSaldoNegativo(cuanto);
     double montoExtraidoHoy = getMontoExtraidoA(LocalDate.now());
     double limite = 1000 - montoExtraidoHoy;
     if (cuanto > limite) {
@@ -55,8 +53,14 @@ public class Cuenta {
     agregarMovimiento(new Extraccion(LocalDate.now(), cuanto));
   }
 
+  private void validarSaldoNegativo(double cuanto) {
+    if (this.getSaldo() - cuanto < 0) {
+      throw new SaldoMenorException("No puede sacar mas de " + this.getSaldo() + " $");
+    }
+  }
 
-   public void agregarMovimiento(Movimiento movimiento) {
+
+  public void agregarMovimiento(Movimiento movimiento) {
     this.setSaldo(movimiento.calcularValor(this.getSaldo()));
     movimientos.add(movimiento);
   }
@@ -67,6 +71,7 @@ public class Cuenta {
         .mapToDouble(Movimiento::getMonto)
         .sum();
   }
+
 
   public List<Movimiento> getMovimientos() {
     return movimientos;
