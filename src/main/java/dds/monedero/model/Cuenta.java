@@ -46,7 +46,7 @@ public class Cuenta {
     validarMonto(cuanto);
     validarSaldoNegativo(cuanto);
     if (cuanto > limiteDeExtraccion()) {
-      throw new MaximoExtraccionDiarioException("No puede extraer mas de $ " + LIMITE_EXTRACCION + " diarios, límite: " + limite);
+      throw new MaximoExtraccionDiarioException("No puede extraer mas de $ " + LIMITE_EXTRACCION + " diarios, límite: " + limiteDeExtraccion());
     }
     agregarMovimiento(new Extraccion(LocalDate.now(), cuanto));
   }
@@ -61,7 +61,6 @@ public class Cuenta {
     }
   }
 
-
   public void agregarMovimiento(Movimiento movimiento) {
     this.setSaldo(movimiento.calcularValor(this.getSaldo()));
     movimientos.add(movimiento);
@@ -73,7 +72,6 @@ public class Cuenta {
         .mapToDouble(Movimiento::getMonto)
         .sum();
   }
-
 
   public List<Movimiento> getMovimientos() {
     return movimientos;
