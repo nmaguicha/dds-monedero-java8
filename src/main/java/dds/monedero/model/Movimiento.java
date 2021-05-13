@@ -2,17 +2,16 @@ package dds.monedero.model;
 
 import java.time.LocalDate;
 
-public class Movimiento {
+public abstract class Movimiento {
   private LocalDate fecha;
   //En ningún lenguaje de programación usen jamás doubles para modelar dinero en el mundo real
   //siempre usen numeros de precision arbitraria, como BigDecimal en Java y similares
   private double monto;
-  private boolean esDeposito;
 
-  public Movimiento(LocalDate fecha, double monto, boolean esDeposito) {
+  public Movimiento() {}
+  public Movimiento(LocalDate fecha, double monto) {
     this.fecha = fecha;
     this.monto = monto;
-    this.esDeposito = esDeposito;
   }
 
   public double getMonto() {
@@ -23,7 +22,10 @@ public class Movimiento {
     return fecha;
   }
 
-  public boolean fueDepositado(LocalDate fecha) {
+  public boolean esDeLaFecha(LocalDate fecha) { return this.fecha.equals(fecha); }
+
+  //Al tener una clase depósito y una clase extracción no voy a necesitar estos métodos
+  /*public boolean fueDepositado(LocalDate fecha) {
     return isDeposito() && esDeLaFecha(fecha);
   }
 
@@ -31,26 +33,9 @@ public class Movimiento {
     return isExtraccion() && esDeLaFecha(fecha);
   }
 
-  public boolean esDeLaFecha(LocalDate fecha) {
-    return this.fecha.equals(fecha);
-  }
+  public boolean isExtraccion() { return !esDeposito;} */
 
-  public boolean isDeposito() { return esDeposito; }
+  public abstract boolean isDeposito();
 
-  public boolean isExtraccion() { return !esDeposito;}
-
-  public void agregateA(Cuenta cuenta) {
-    cuenta.setSaldo(calcularValor(cuenta));
-    cuenta.agregarMovimiento(fecha, monto, esDeposito);
-  }
-
-  /* El movimiento tiene la responsabilidad de calcular el valor de la cuenta?*/
-
-  public double calcularValor(Cuenta cuenta) {
-    if (esDeposito) {
-      return cuenta.getSaldo() + getMonto();
-    } else {
-      return cuenta.getSaldo() - getMonto();
-    }
-  }
+  public abstract double calcularValor(double saldo);
 }
