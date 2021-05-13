@@ -11,6 +11,7 @@ import java.util.List;
 
 public class Cuenta {
 
+  public static final int LIMITE_DEPOSITO = 3;
   private double saldo = 0;
   private List<Movimiento> movimientos = new ArrayList<>();
 
@@ -28,10 +29,9 @@ public class Cuenta {
 
   public void poner(double cuanto) {
     validarMonto(cuanto);
-    if (getMovimientos().stream().filter(movimiento -> movimiento.isDeposito()).count() >= 3) {
-      throw new MaximaCantidadDepositosException("Ya excedio los " + 3 + " depositos diarios");
+    if (getMovimientos().stream().filter(movimiento -> movimiento.isDeposito()).count() >= LIMITE_DEPOSITO) {
+      throw new MaximaCantidadDepositosException("Ya excedio los " + LIMITE_DEPOSITO + " depositos diarios");
     }
-
     agregarMovimiento(new Deposito(LocalDate.now(), cuanto));
   }
 
