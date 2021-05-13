@@ -10,7 +10,7 @@ public class Deposito extends Movimiento{
 
   @Override
   public double calcularValor(double saldo) {
-    return 0;
+    return saldo + this.getMonto();
   }
 
   @Override
